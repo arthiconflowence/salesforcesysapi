@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="get-case-test-suite.xml" />
+	<munit:test name="get-case-bad-request-test-suite-get:\case\(caseId):sfdc-case-sys-api-configTest" doc:id="e6444adb-9af7-4459-9184-ed5210bf2856" description="Test" expectedErrorType="SALESFORCE:UNKNOWN" expectedErrorDescription="INVALID_QUERY_FILTER_OPERATOR">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="0bd8be06-b298-4cb9-81e6-5645c08bdf5e" >
+				<munit:attributes value="#[{uriParams : {'caseId' : ' '}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to get:\case\(caseId):sfdc-sys-api-config" doc:id="81394ba3-1e65-4fc3-aeb4-20e73432ea3a" name="get:\case\(caseId):sfdc-sys-api-config"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="67eb887b-51dd-4c80-b719-995a1d68b5d0" actual="#[payload.errorMessage]" expected="#['ErrorCode: INVALID_QUERY_FILTER_OPERATOR']" message="${munit.message}"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>

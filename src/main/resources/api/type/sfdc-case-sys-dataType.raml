@@ -1,0 +1,178 @@
+#%RAML 1.0 DataType
+type: object
+properties: 
+  
+  caseId:
+    type: string
+    required: true
+    description: Unique Id of the case created in Salesforce which will be                   used to query/update/delete the case
+  isDeleted:
+    type: boolean
+    required: false
+    description: Indicates whether the object has been moved to the Recycle                  Bin (true) or not (false)
+  masterRecordId:
+    type: string
+    required: false
+    description: Master Record Id of the case
+  caseNumber:
+    type: string
+    required: false
+    description: Unique number assigned to the case. Numbers start at 1000 and are read only
+  contactId:
+    type: string
+    required: false
+    description: Contact Id of the case
+  accountId:
+    type: string
+    required: false
+    description: Account Id of the case
+  assetId:
+    type: string
+    required: false
+    description: Asset Id of the case
+  sourceId:
+    type: string
+    required: false
+    description: Source Id of the case
+  parentId:
+    type: string
+    required: false
+    description: The ID of the parent case in the hierarchy
+  suppliedName:
+    type: string
+    required: false
+    description: The name that was entered when the case was created
+  suppliedEmail:
+    type: string
+    required: false
+    description: The email address that was entered when the case was created.
+  suppliedPhone:
+    type: string
+    required: false
+    description: The phone number that was entered when the case was created
+  suppliedCompany:
+    type: string
+    required: false
+    description: The company name that was entered when the case was created
+  caseType:
+    type: string
+    required: false
+    description: Type of case, for example, question or problem
+  status:
+    type: string
+    required: false
+    description: Status of a case, for example, open or closed
+  reason:
+    type: string
+    required: false
+    description: The reason a case was created.
+  origin:
+    type: string
+    required: false
+    description: Source of a case, for example, phone, email, or web
+  subject:
+    type: string
+    required: false
+    description: Brief description of the customer’s question or feedback
+  priority:
+    type: string
+    required: false
+    description: Urgency of a case
+  description:
+    type: string
+    required: false
+    description: A text description of the case
+  isClosed:
+    type: boolean
+    required: false
+    description: Indicator to determine whether case is open or closed
+  closeDate:
+    type: string
+    required: false
+    description: Close date of the case
+  isEscalated:
+    type: boolean
+    required: false
+    description: Indicates whether the case has been escalated (true) or not
+  ownerId:
+    type: string
+    required: false
+    description: ID of the contact who owns the case
+  createDate:
+    type:  string
+    required: false
+    description: Case creation timestamp
+  createdById:
+    type: string
+    required: false
+    description: Identifier of the case creator
+  lastModifiedDate:
+    type: string
+    required: false
+    description: Last modified date time of the date
+  lastModifiedById:
+    type: string
+    required: false
+    description: Id of who last changed a case
+  systemModStamp:
+    type: string
+    required: false
+    description: Incident Creation Field
+  contactPhone:
+    type: string
+    required: false
+    description: Phone number of a case’s contact
+  contactMobile:
+    type: string
+    required: false
+    description: Mobile phone number of a case’s contact
+  contactEmail:
+    type: string
+    required: false
+    description: Email address of a case’s contact
+  contactFax:
+    type: string
+    required: false
+    description: Fax number of a case’s contact.
+  comments:
+    type: string
+    required: false
+    description: Used to insert a new CaseComment
+  lastViewedDate:
+    type: string
+    required: false
+    description: The timestamp for when the current user last viewed this record
+  lastReferencedDate:
+    type: string
+    required: false
+    description: The timestamp for when the current user last viewed a record related to this record
+  externalComments:
+    type: string
+    required: false
+    description: Comments field corresponds to external system
+  externalStatus:
+    type: string
+    required: false
+    description: Status field corresponds to external system
+  externalSystemLastUpdated:
+    type: string
+    required: false
+    description: Last Updated Date Fields corresponds to external system
+  externalOwner:
+    type: string
+    required: false
+    description: Owner of the case in external system
+  externalPriority:
+    type: string
+    required: false
+    description: Priority of the case in external system
+  syncToSNOW:
+    type: boolean
+    required: false
+    description: Sync flag to sync with ServiceNow
+  syncToJIRA:
+    type: boolean
+    required: false
+    description: Sync flag to sync with JIRA
+examples: 
+  !include ..//examples/case.raml

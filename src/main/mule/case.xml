@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+	 <flow name="case_patch-case-object">
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="762bdee3-7435-492c-a921-19e6fb32f68f" doc:name="Set Case Id">
+            <ee:variables>
+                <ee:set-variable variableName="caseId"><![CDATA[attributes.uriParams.'caseId']]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+       <ee:transform doc:name="Canonical To SFDC" doc:id="7c769614-07b1-4980-8e6e-ec104c4a72e9" >
+			<ee:message >
+				<ee:set-payload resource="transforms/dwl/sfdc-update-case.dwl" />
+			</ee:message>
+		</ee:transform>
+		<logger level="TRACE" doc:name="Before SF Update" doc:id="de1877af-92a6-4896-b392-bd19e4080af3" message="${application-msgs.before-connector-call-message}"/>
+		<until-successful maxRetries="${retry.sfdc.numRetries}" doc:name="until-successful-call-update-sf-case" doc:id="a01ca8c9-bda1-4aae-8a54-68828a24f562" millisBetweenRetries="${retry.sfdc.delayMillisecs}">
+			<salesforce:update type="Case" doc:name="call-update-sf-case-type" doc:id="776c2c73-4812-4205-b877-59515022f3f0" config-ref="Salesforce_Config" />
+		</until-successful>
+		<logger level="TRACE" doc:name="After SF Update" doc:id="0d36ea88-a32b-49ef-9948-795252b3777d" message="${application-msgs.after-connector-call-message}"/>
+		<ee:transform doc:name="Reponse Map" doc:id="b999a9c8-edca-454e-af82-1cf1e7866f46" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+success: payload.items[0].successful,
+id: payload.items[0].id,
+errors: payload[0].items[0].exception default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+    </flow>
+	<flow name="case_get-case-details">
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="b6b5d01b-ed38-4e46-8138-5de1d6f23995" doc:name="Set Case Id">
+            <ee:variables>
+                <ee:set-variable variableName="caseId"><![CDATA[attributes.uriParams.'caseId']]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+		<logger level="TRACE" doc:name="Before SF Query" doc:id="5b3cfd86-234e-4153-a1c4-566eb2842848" message="${application-msgs.before-connector-call-message}"/>
+		<until-successful maxRetries="${retry.sfdc.numRetries}" doc:name="until-successful-call-query-sf-case" doc:id="8d32c646-0d3a-4bf1-9a81-abbdecf7248a" millisBetweenRetries="${retry.sfdc.delayMillisecs}">
+			
+			<salesforce:query doc:name="call-sfdc-caseQuery" doc:id="9e15ad75-3887-4c68-8bc4-62040a675c63" config-ref="Salesforce_Config">
+			<salesforce:salesforce-query>${sfdc.caseQuery}</salesforce:salesforce-query>
+			<salesforce:parameters><![CDATA[#[output application/java
+---
+{
+	caseId : "'" ++  vars.caseId ++ "'"
+}]]]></salesforce:parameters>
+			</salesforce:query>
+		</until-successful>
+		
+		<logger level="TRACE" doc:name="After SF Query" doc:id="704084e8-a7fe-42f3-bdb5-86463f320e58" message="${application-msgs.after-connector-call-message}"/>
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd"   doc:id="086a8613-caf8-478f-bbdf-4b5c3f9c8aad" doc:name="Response Map">
+			<ee:message >
+				<ee:set-payload resource="transforms/dwl/sfdc-get-case.dwl" />
+			</ee:message>
+		</ee:transform>
+        </flow>
+	</mule>

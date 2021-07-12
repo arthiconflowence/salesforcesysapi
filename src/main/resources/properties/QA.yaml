@@ -1,0 +1,42 @@
+#API Configurations
+sfdc-sys-api:
+  http-listener:
+    host: "REPLACE_BY_USER"
+    path: "REPLACE_BY_USER"
+    port: "REPLACE_BY_USER"
+api:
+  #Replace with respective autodiscovery id
+  autodiscoveryID: "REPLACE_BY_USER"
+  
+#Salesforce Configurations
+sfdc:
+  #Replace Salesforce Username
+  userName: "REPLACE_BY_USER"
+  caseQuery: "SELECT AccountId,AssetId,CaseNumber,ClosedDate,Comments,ContactEmail,ContactFax,ContactId,ContactMobile,ContactPhone,CreatedById,CreatedDate,Description,Id,IsClosed,IsDeleted,IsEscalated,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate,MasterRecordId,Origin,OwnerId,ParentId,Priority,Reason,SourceId,Status,Subject,SuppliedCompany,SuppliedEmail,SuppliedName,SuppliedPhone,SystemModstamp,Sync_With_JIRA__c,Sync_With_SNOW__c,Type\
+    \ FROM Case WHERE Id = :caseId"
+#Customize the application messages in the below section
+application-msgs:
+  #Before Connector logger message
+  before-connector-call-message: "Before Connector Call"
+  #After Connector logger message
+  after-connector-call-message: "After Connector Call"
+  #Local Exception logger message
+  local-exception-handler-message: "Exception has occured"
+  success-flag: "true"
+#MUNIT Message for failed tests
+munit:
+  message: "Test Failed"
+  #Replace Test Lookup Id
+  lookupId: "REPLACE_BY_USER"
+  
+#retry
+retry:
+   sfdc: 
+    delayMillisecs: "3000"
+    numRetries: "3"
+#reconnection
+reconnection:
+     sfdc:
+      frequency: "2000"
+      attempts: "2"
+
